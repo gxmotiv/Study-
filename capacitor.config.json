@@ -1,0 +1,6 @@
+{
+  "appId": "in.gxmotiv.nioseconomics",
+  "appName": "NIOS Economics Study Centre",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}
