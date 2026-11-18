@@ -11,9 +11,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install actionlint
+      - name: Download current Android workflow and actionlint
         run: |
+          mkdir -p workflow-check
+          curl -fsSL https://raw.githubusercontent.com/gxmotiv/Study-/main/.github/workflows/android-32bit.yml -o workflow-check/android-32bit.yml
           bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
       - name: Validate Android workflow
-        run: ./actionlint -color .github/workflows/android-32bit.yml
+        run: ./actionlint -color workflow-check/android-32bit.yml
