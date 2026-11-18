@@ -1,4 +1,4 @@
-name: Temporary Actions smoke test
+name: Temporary Actions workflow lint test
 
 on:
   push:
@@ -8,10 +8,12 @@ permissions:
   contents: read
 
 jobs:
-  smoke:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm GitHub Actions runner starts
+      - uses: actions/checkout@v4
+      - name: Install actionlint
         run: |
-          echo "GitHub Actions runner started"
-          date -u
+          bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+      - name: Validate Android workflow
+        run: ./actionlint -color .github/workflows/android-32bit.yml
