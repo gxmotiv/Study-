@@ -1,57 +1,88 @@
-name: Build Android 32-bit APK
+name: Build Android ARM32 APK
+
 on:
-  workflow_dispatch:
   push:
-    branches: [main, feature/study-centre-android-32bit]
-    paths:
-      - 'index.html'
-      - 'package.json'
-      - 'capacitor.config.json'
-      - 'manifest.webmanifest'
-      - 'sw.js'
-      - '.github/workflows/android-32bit.yml'
+    branches: [main]
+  workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
+    name: Build NIOS Economics Study Centre (ARMv7)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - uses: actions/setup-java@v4
+          node-version: '22'
+
+      - name: Set up Java 21 (required by Capacitor 7)
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v4
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
       - name: Install Android SDK packages
-        run: yes | sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" || true
-      - name: Install JavaScript dependencies
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Install project dependencies
         run: npm install --no-audit --no-fund
-      - name: Prepare web assets and create Android project
+
+      - name: Prepare web assets
         run: |
           npm run prepare:web
           npx cap add android
           npx cap sync android
-      - name: Restrict APK to 32-bit ARM
+
+      - name: Configure 32-bit ARM ABI
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path("android/app/build.gradle")
-          s = p.read_text()
+          gradle_file = Path("android/app/build.gradle")
+          source = gradle_file.read_text()
           marker = "defaultConfig {"
-          if marker not in s:
-              raise SystemExit("Could not find defaultConfig in generated Android Gradle file")
-          s = s.replace(marker, marker + '\n        ndk { abiFilters "armeabi-v7a" }', 1)
-          p.write_text(s)
-          print("Configured ABI: armeabi-v7a")
+          if marker not in source:
+              raise SystemExit("Android defaultConfig block was not found")
+          source = source.replace(
+              marker,
+              marker + '\\n        ndk { abiFilters "armeabi-v7a" }',
+              1,
+          )
+          gradle_file.write_text(source)
+          print("Configured ABI filter: armeabi-v7a")
           PY
+
+      - name: Verify Java and Gradle toolchain
+        run: |
+          java -version
+          javac -version
+          grep -n "VERSION_21" node_modules/@capacitor/android/capacitor/build.gradle || true
+          cd android
+          chmod +x gradlew
+          ./gradlew --version
+
       - name: Build debug APK
         working-directory: android
-        run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon --stacktrace
-      - uses: actions/upload-artifact@v4
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Verify APK output
+        run: |
+          test -s android/app/build/outputs/apk/debug/app-debug.apk
+          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload ARM32 debug APK
+        uses: actions/upload-artifact@v4
         with:
           name: nios-economics-study-centre-arm32-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
