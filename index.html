@@ -34,7 +34,7 @@ function markDone(n){if(!completed.includes(n))completed.push(n);persistDone();r
 function renderLessons(){
  const filter=document.getElementById("lessonFilter")?.value||"all";
  const items=window.COURSE_LESSONS.filter(x=>filter==="all"||(filter==="tma"?x.part==="TMA":x.part==="PUBLIC EXAM"));
- document.getElementById("lessonList").innerHTML=items.map(x=>'<button class="lesson '+(completed.includes(x.n)?'done':'')+'" onclick="openLesson('+x.n+')"><span>L'+x.n+' · '+x.t+'<small>'+x.part+' · '+x.module+(x.weight?' · module '+x.weight+' marks':'')+'</small></span><span>'+(completed.includes(x.n)?'✓':'›')+'</span></button>').join("");
+ document.getElementById("lessonList").innerHTML=items.map(x=>'<button class="lesson '+(completed.includes(x.n)?'done':'')+'" onclick="openLesson('+x.n+')"><span>L'+x.n+' · '+x.t+'<small>'+x.part+' · '+x.module+(x.weight?' · module total '+x.weight+' marks':'')+'</small></span><span>'+(completed.includes(x.n)?'✓':'›')+'</span></button>').join("");
 }
 function openLesson(n){
  const x=window.COURSE_LESSONS.find(y=>y.n===n),d=document.getElementById("lessonDetail");
