@@ -1,0 +1,9 @@
+{
+  "name": "NIOS Economics Study Centre",
+  "short_name": "Study Centre",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#142b4a",
+  "description": "Offline-first NIOS Economics 318 study centre"
+}
