@@ -1,0 +1,17 @@
+name: Temporary Actions smoke test
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm GitHub Actions runner starts
+        run: |
+          echo "GitHub Actions runner started"
+          date -u
