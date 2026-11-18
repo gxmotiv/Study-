@@ -9,6 +9,7 @@ on:
       - 'capacitor.config.json'
       - 'manifest.webmanifest'
       - 'sw.js'
+      - 'lessons.js'
       - '.github/workflows/android-32bit.yml'
   workflow_dispatch:
 
