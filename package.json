@@ -1,0 +1,16 @@
+{
+  "name": "nios-economics-study-centre",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline-first NIOS Economics 318 Study Centre Android wrapper",
+  "scripts": {
+    "prepare:web": "node -e \"require('fs').mkdirSync('www',{recursive:true});require('fs').copyFileSync('index.html','www/index.html');require('fs').copyFileSync('manifest.webmanifest','www/manifest.webmanifest');require('fs').copyFileSync('sw.js','www/sw.js')\""
+  },
+  "dependencies": {
+    "@capacitor/android": "7.4.3",
+    "@capacitor/core": "7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "7.4.3"
+  }
+}
