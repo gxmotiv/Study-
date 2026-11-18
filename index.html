@@ -45,7 +45,18 @@ function openLesson(n){
 }
 function showTab(id){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id===id))}
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
-const qs=[{q:"What does a measure of central tendency provide?",o:["A representative value for the data","The highest value only","The lowest value only"],a:0,e:"It gives a value that represents the entire data set."},{q:"Which is a mathematical average in your notes?",o:["Median","Arithmetic Mean","Mode"],a:1,e:"Arithmetic Mean is the mathematical average."},{q:"Formula for arithmetic mean in an individual series?",o:["ΣX × N","N / ΣX","ΣX / N"],a:2,e:"Add all observations and divide by their number."},{q:"Find the mean of 10, 20 and 30.",o:["20","30","60"],a:0,e:"(10 + 20 + 30) / 3 = 20."}];let answers={};
+const qs=[
+{q:"Find the arithmetic mean of 10, 20 and 30.",o:["20","30","60"],a:0,e:"(10 + 20 + 30) ÷ 3 = 20."},
+{q:"The range of 4, 9 and 12 is:",o:["8","9","12"],a:0,e:"Range = largest − smallest = 12 − 4 = 8."},
+{q:"Positive correlation means two variables generally:",o:["Move in opposite directions","Move in the same direction","Have no relationship"],a:1,e:"Positive correlation means they tend to move together."},
+{q:"If the price of a good falls, other things equal, the law of demand predicts:",o:["Extension of demand","Contraction of demand","A left shift of demand"],a:0,e:"A change in own price causes movement along the same demand curve."},
+{q:"According to the law of supply, a rise in price generally causes:",o:["Quantity supplied to fall","Quantity supplied to rise","Supply to become zero"],a:1,e:"Price and quantity supplied generally have a direct relationship."},
+{q:"TP rises from 30 to 42 when labour rises from 3 to 4 workers. MP of the 4th worker is:",o:["12","30","42"],a:0,e:"MP = change in TP = 42 − 30 = 12."},
+{q:"Which formula is correct?",o:["TC = TFC + TVC","TC = TFC − TVC","TC = AFC + AVC"],a:0,e:"Total cost equals total fixed cost plus total variable cost."},
+{q:"Price rises by 20% and quantity supplied rises by 30%. Elasticity of supply is:",o:["0.67","1.5","10"],a:1,e:"Es = 30% ÷ 20% = 1.5, so supply is elastic."},
+{q:"Primary deficit is equal to:",o:["Fiscal deficit + interest payments","Fiscal deficit − interest payments","Revenue receipts − revenue expenditure"],a:1,e:"Primary deficit = fiscal deficit minus interest payments."},
+{q:"If MPC is 0.8, the simple investment multiplier is:",o:["2","4","5"],a:2,e:"k = 1 ÷ (1 − MPC) = 1 ÷ 0.2 = 5."}
+];let answers={};
 function renderQuiz(){document.getElementById("quiz").innerHTML=qs.map((q,i)=>'<div class="q"><b>'+(i+1)+'. '+q.q+'</b>'+q.o.map((o,j)=>'<button class="opt" data-q="'+i+'" data-a="'+j+'" onclick="choose('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+o+'</button>').join("")+'<div class="note" id="ex'+i+'"></div></div>').join("");answers={}}
 function choose(i,j){answers[i]=j;document.querySelectorAll('[data-q="'+i+'"]').forEach(b=>b.style.outline="");document.querySelector('[data-q="'+i+'"][data-a="'+j+'"]').style.outline="2px solid #245a91"}
 function gradeQuiz(){let score=0;qs.forEach((q,i)=>{const a=answers[i],ex=document.getElementById("ex"+i);if(a===q.a)score++;ex.textContent=a===q.a?"Correct. "+q.e:"Review: "+q.e;document.querySelectorAll('[data-q="'+i+'"]').forEach(b=>{let j=+b.dataset.a;if(j===q.a)b.classList.add("correct");else if(j===a)b.classList.add("wrong")})});document.getElementById("quizResult").textContent="Your score: "+score+" / "+qs.length;localStorage.setItem("sc_last_score",score)}
