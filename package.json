@@ -4,7 +4,7 @@
   "private": true,
   "description": "Offline-first NIOS Economics 318 Study Centre Android wrapper",
   "scripts": {
-    "prepare:web": "node -e \"require('fs').mkdirSync('www',{recursive:true});require('fs').copyFileSync('index.html','www/index.html');require('fs').copyFileSync('manifest.webmanifest','www/manifest.webmanifest');require('fs').copyFileSync('sw.js','www/sw.js')\""
+    "prepare:web": "node -e \"require('fs').mkdirSync('www',{recursive:true});require('fs').copyFileSync('index.html','www/index.html');require('fs').copyFileSync('manifest.webmanifest','www/manifest.webmanifest');require('fs').copyFileSync('sw.js','www/sw.js');require('fs').copyFileSync('lessons.js','www/lessons.js')\""
   },
   "dependencies": {
     "@capacitor/android": "7.4.3",
